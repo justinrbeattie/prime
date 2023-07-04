@@ -1,0 +1,88 @@
+:root {
+    --page-width: 100vw;
+    --page-height: 100dvh;
+    --top-nav-height: clamp(2.5rem, 8vh, 4rem);
+    --bottom-nav-height: clamp(2.5rem, 8vh, 4rem);
+    --viewport-height: calc(var(--page-height) - (var(--top-nav-height) + var(--bottom-nav-height)));
+}
+
+body {
+    display: grid;
+    width: var(--page-width);
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: var(--top-nav-height) auto var(--bottom-nav-height);
+    grid-template-areas:
+      "header header header"
+      "side-nav-start main side-nav-end"
+      "bottom-nav bottom-nav bottom-nav";
+    position: relative;
+    background-color: var(--surface-1);
+    perspective: 1000px;
+    perspective-origin: 50% calc(var(--page-height) - var(--bottom-nav-height));
+  }
+
+
+  .layer {
+    grid-area:main;
+    display:flex;
+    place-content: center;
+    pointer-events: none;
+    filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.25));
+  }
+
+  .layer-0 {
+    transform: translateZ(-32px);
+    z-index:0;
+  }
+
+  .layer-1 {
+    position:sticky;
+    top:calc(var(--top-nav-height) + 1.5rem)!important;
+    transform: translateZ(-16px);
+    height:calc(var(--viewport-height) - 1.5rem)!important;
+    z-index:1;
+  }
+
+  .layer-2 {
+    position:sticky;
+    top:calc(var(--top-nav-height) + 3rem)!important;
+    transform: translateZ(-4px);
+    height:calc(var(--viewport-height) - 3rem)!important;
+    z-index:2;
+  }
+
+  .page {
+    width:100%;
+    height:100%;
+    display:flex;
+    place-content: center;
+  }
+
+  .layer:not(.layer-0) .page {
+
+    width:calc(100% - 80px);
+    clip-path: inset(0px 0px 0px 0px round 2rem 2rem 0px 0px);
+  }
+
+
+  .page > *{
+    pointer-events: all;
+  }
+
+
+
+  main {
+    width:100%;
+    height:100%;   
+  }
+
+  .scroll-container {
+    width:100%;
+    height:100%;
+    background:var(--surface-1);
+    overflow-x:clip;
+    overflow-y:scroll;
+    overscroll-behavior: contain;
+  }
+
+  /* add scroll container inside page */

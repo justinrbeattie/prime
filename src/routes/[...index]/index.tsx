@@ -44,12 +44,14 @@ export default component$(() => {
   // RenderContent component uses `content` prop to render
   // the page, specified by the API Key, at the current URL path.
   return (
-    <RenderContent
+    <><RenderContent
       model="page"
       content={builderContent.value}
       apiKey={import.meta.env.PUBLIC_BUILDER_API_KEY}
-      customComponents={CUSTOM_COMPONENTS}
-    />
+      customComponents={CUSTOM_COMPONENTS} />
+      <div style="height:100vh">
+        aa
+        </div></>
   );
 });
 

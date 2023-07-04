@@ -1,0 +1,23 @@
+nav-block-end {
+    grid-area: bottom-nav;
+    bottom: 0;
+    position: sticky;
+    inset-block-end: 0px;
+    inset-inline-start: 0px;
+    z-index: 999;
+    background-color: var(--surface-0);
+
+
+    &:after {
+        content: '';
+        width:100%;
+        height:100%;
+        position: absolute;
+        inset-block-start: 0px;
+        inset-inline-start: 0px;
+        z-index: -1;
+        box-shadow: var(--shadow-3);
+        transform: rotate(180deg);
+    }
+
+}

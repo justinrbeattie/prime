@@ -1,0 +1,9 @@
+nav-block-start {
+    grid-area:header;
+    position:sticky;
+    inset-block-start:0px;
+    inset-inline-start:0px;
+    z-index:999;
+    background-color:var(--surface-0);
+    box-shadow: var(--shadow-3);
+}
