@@ -1,0 +1,49 @@
+page-drawer {
+    --drawer-header-height:calc(var(--top-nav-height) * .75);
+    width: 100%;
+    height: 100%;
+    overflow-x: clip;
+    overflow-y: scroll;
+    overscroll-behavior: contain;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 100% var(--drawer-header-height) calc(100% - (var(--top-nav-height) * .75));
+    grid-template-areas: "placeholder"
+        "header"
+        "main"
+    ;
+    gap:1px;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    clip-path:inset(calc(100% - var(--drawer-header-height)) 0px 0px 0px round 0rem);
+
+    &[closed] {
+        display:none;
+    }
+
+    &:not([collapsed]), &:has(header:hover) {
+        clip-path:inset(0px 0px 0px 0px round 0rem);
+    }
+
+    &:before {
+        content:'';
+        grid-area: placeholder;
+        pointer-events: none;
+
+
+    }
+
+}
+
+header {
+    grid-area: header;
+    background:var(--surface-0);
+    scroll-snap-align: end;
+}
+
+main {
+    grid-area: main;
+    background:var(--surface-0);
+    scroll-snap-align: start;
+}

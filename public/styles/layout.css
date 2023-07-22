@@ -1,88 +1,131 @@
 :root {
-    --page-width: 100vw;
-    --page-height: 100dvh;
-    --top-nav-height: clamp(2.5rem, 8vh, 4rem);
-    --bottom-nav-height: clamp(2.5rem, 8vh, 4rem);
-    --viewport-height: calc(var(--page-height) - (var(--top-nav-height) + var(--bottom-nav-height)));
+  --page-width: 100vw;
+  --page-height: 100dvh;
+  --top-nav-height: clamp(2.5rem, 8vh, 4rem);
+  --bottom-nav-height: clamp(2.5rem, 8vh, 4rem);
+  --viewport-height: calc(var(--page-height) - (var(--top-nav-height) + var(--bottom-nav-height)));
+  --layer-open-offset: 0rem;
 }
 
 body {
-    display: grid;
-    width: var(--page-width);
-    grid-template-columns: auto 1fr auto;
-    grid-template-rows: var(--top-nav-height) auto var(--bottom-nav-height);
-    grid-template-areas:
-      "header header header"
-      "side-nav-start main side-nav-end"
-      "bottom-nav bottom-nav bottom-nav";
-    position: relative;
-    background-color: var(--surface-1);
-    perspective: 1000px;
-    perspective-origin: 50% calc(var(--page-height) - var(--bottom-nav-height));
-  }
+  display: grid;
+  width: var(--page-width);
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: var(--top-nav-height) auto var(--bottom-nav-height);
+  grid-template-areas:
+    "header header header"
+    "side-nav-start main side-nav-end"
+    "bottom-nav bottom-nav bottom-nav";
+  position: relative;
+  background-color: var(--surface-1);
+}
 
 
-  .layer {
-    grid-area:main;
-    display:flex;
-    place-content: center;
-    pointer-events: none;
-    filter: drop-shadow(0 0 0.75rem rgba(0,0,0,0.25));
-  }
+.layer {
+  display:none;
+  --drawer-header-height:calc(var(--top-nav-height) * .75);
+  position: sticky;
+  top: var(--top-nav-height);
+  height: var(--viewport-height);
+  grid-area: main;
+  display: flex;
+  place-content: center;
+  pointer-events: none;
+  perspective: 1000px;
+  perspective-origin: 50% 0%;
+  transition: background-color 250ms ease-in-out transform 250ms ease-in-out;
+}
 
-  .layer-0 {
-    transform: translateZ(-32px);
-    z-index:0;
-  }
+.layer:has(.page-drawer[collapsed]) {
+  background-color:rgba(0,0,0,0);
+  transition: background-color 100ms ease-in-out;
+}
 
-  .layer-1 {
-    position:sticky;
-    top:calc(var(--top-nav-height) + 1.5rem)!important;
-    transform: translateZ(-16px);
-    height:calc(var(--viewport-height) - 1.5rem)!important;
-    z-index:1;
-  }
+.layer:has(.page-drawer[transitioning]) {
+  background-color:rgba(0,0,0,0.125);
+  transition: background-color 100ms ease-in-out;
+}
 
-  .layer-2 {
-    position:sticky;
-    top:calc(var(--top-nav-height) + 3rem)!important;
-    transform: translateZ(-4px);
-    height:calc(var(--viewport-height) - 3rem)!important;
-    z-index:2;
+.layer:has(.page-drawer[expanded]) {
+  background-color:rgba(0,0,0,0.25);
+}
+
+
+#layer-0 {
+  position: unset;
+  top: unset;
+  height: auto;
+  transform:unset;
+  z-index: 0;
+  .page {
+    transform: unset;
   }
+}
+
+/* set layering using variables */
+/* use has to work out */
+
+.layer:has(+ .layer + .layer + .layer:not([layer-closed])) {
+  padding-top: 1rem;
+  z-index: 1;
+  filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.125));
 
   .page {
-    width:100%;
-    height:100%;
-    display:flex;
-    place-content: center;
+    transform:  translateZ(-48px) translateY(calc(var(--drawer-header-height) * -.125));
   }
+}
 
-  .layer:not(.layer-0) .page {
+.layer:has(+ .layer + .layer:not([layer-closed])) {
+  padding-top: 2rem;
+  z-index: 2;
+  filter: drop-shadow(0 0 0.5rem rgba(0, 0, 0, 0.125));
 
-    width:calc(100% - 80px);
-    clip-path: inset(0px 0px 0px 0px round 2rem 2rem 0px 0px);
+  .page {
+    transform:  translateZ(-32px) translateY(calc(var(--drawer-header-height) * -.125));
   }
+}
 
+.layer:has(+ .layer:not([layer-closed])) {
+  padding-top:3rem;
+  z-index: 3;
+  filter: drop-shadow(0 0 0.25rem rgba(0, 0, 0, 0.125));
 
-  .page > *{
+  .page {
+    transform:  translateZ(-16px) translateY(calc(var(--drawer-header-height) * -.125));
+  }
+}
+
+.layer:has(+ style + nav-block-end), .layer:has(+ [layer-closed])  {
+  padding-top: 4rem;
+  z-index: 4;
+
+  .page {
+    transform: translateZ(0px)  translateY(0rem);
+  }
+}
+
+.page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  place-content: center;
+  >* {
     pointer-events: all;
   }
+}
+
+#layer-0 ~ .layer > .page {
+  width: calc(100% - 80px);
+}
+
+main {
+  width: 100%;
+  height: 100%;
+}
+
+[hidden]:is(header,main) {
+  display: block !important;
+}
 
 
-
-  main {
-    width:100%;
-    height:100%;   
-  }
-
-  .scroll-container {
-    width:100%;
-    height:100%;
-    background:var(--surface-1);
-    overflow-x:clip;
-    overflow-y:scroll;
-    overscroll-behavior: contain;
-  }
-
-  /* add scroll container inside page */
+/* add scroll container inside page */

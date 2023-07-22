@@ -35,7 +35,7 @@ export default component$(() => {
         <script>
           cssHasPseudo(document)</script>
           <script src="../node_modules/@oddbird/popover-polyfill/dist/popover.js" type="module"></script>
-          <script src="../scripts/scroll-timeline.js"></script>
+          <script src="https://argyleink.github.io/scroll-timeline/dist/scroll-timeline.js"></script>
       </body>
 
 

@@ -18,6 +18,7 @@ nav-block-end {
         z-index: -1;
         box-shadow: var(--shadow-3);
         transform: rotate(180deg);
+        opacity:.5;
     }
 
 }
